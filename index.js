@@ -1,4 +1,5 @@
 import {appendFileSync} from 'fs';
+import { data } from './data.js';
 
 const Contact = (name,phone,email) => {
     const csv = `${name},${phone},${email}\n`;
@@ -10,6 +11,7 @@ const Contact = (name,phone,email) => {
     }
 }
 
+console.log(data);
 //testting
 
 const startApp = () => {
