@@ -10,6 +10,7 @@ const Contact = (name,phone,email) => {
     }
 }
 
+//testting
 
 const startApp = () => {
     const contact1 = Contact("Bill", "+00123456789", "bill@codingthesmartway.com");
