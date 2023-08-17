@@ -1,39 +1,34 @@
-import {appendFileSync} from 'fs';
+import { appendFileSync } from 'fs';
 import axios from 'axios';
 
-const Contact = (id,name,username,email,address) => {
-    const csv = `${id},${name},${username},${email},${address}\n`;
+// The Users function takes user information and appends it to a CSV file.
+const Users = (id, name, username, email, address) => {
+    const csv = `${id},${name},${username},${email},${address}\n`; // Construct a CSV row
     try {
-        appendFileSync("./contacts.csv",csv)
+        appendFileSync("./contacts.csv", csv); // Append the CSV row to the file
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
-}
+};
 
- const users = await axios.get("https://jsonplaceholder.typicode.com/users");
- const data = users.data;
+// Fetch JSON data from a URL using Axios and directly process it
+const fetchAndProcessData = async () => {
+    try {
+        const jsonData = await axios.get("https://jsonplaceholder.typicode.com/users");
+        const data = jsonData?.data; // Extract the data property from the response
+        
+        data.forEach(contact => {
+            const { id, name, username, email, address } = contact; // Destructure contact properties
+            const { street, city, zipcode } = address; // Destructure address properties
+            const fullAddress = `${street},${city},${zipcode}`; // Combine address properties
+            Users(id, name, username, email, fullAddress); // Call Users function to append to CSV
+        });
+        
+        console.log('CSV creation successful!');
+    } catch (error) {
+        console.log('Error fetching or processing data:', error);
+    }
+};
 
-const result = data.map(contact => contact);
-
-// function checkCategory(num){
-//     if (num > 0 && num <= 25){
-//         return 'Young Blud'
-//    }else if (num >25 && num <=45){
-//         return 'Mature'
-//    }else{
-//         return 'Agba !!!'
-//    }    
-// }
-
-
-const startApp = () => {
-    result.forEach(contact => {
-        const {id,name,username,email} = contact;
-        const {street,city,zipcode} = contact.address;
-        const address = `${street},${city},${zipcode}`;
-        const contact1 = Contact(id,name,username,email,address);
-        return contact1;
-    })
-}
-
-startApp();
+// Start the application by calling the fetchAndProcessData function
+fetchAndProcessData();
